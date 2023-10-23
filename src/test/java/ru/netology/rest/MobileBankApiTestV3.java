@@ -5,6 +5,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.*;
 
 class MobileBankApiTestV3 {
@@ -22,9 +23,9 @@ class MobileBankApiTestV3 {
           .statusCode(200)
           // специализированные проверки - лучше
           .contentType(ContentType.JSON)
+          .body(matchesJsonSchemaInClasspath("accounts.schema.json"))
           .body("", hasSize(3))
           .body("[0].currency", equalTo("RUB"))
-          .body("[0].balance", greaterThanOrEqualTo(0))
-      ;
+          .body("[0].balance", greaterThanOrEqualTo(0));
     }
 }
